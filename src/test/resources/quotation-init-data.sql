@@ -1,0 +1,5 @@
+insert into quotations (quotation_code, amount, customer_id, expiry_time, product_code) values ('862ef3e0-0829-4ba1-b895-05f887b40da8', 1500, 1, '2022-02-01T12:30:00Z', 'HOME-001')
+insert into quotations (quotation_code, amount, customer_id, expiry_time, product_code) values ('e6766e0c-df53-4ea8-bede-dbe3b4006798', 2400, 1, '2022-02-14T16:45:00Z', 'HOME-001')
+insert into quotations (quotation_code, amount, customer_id, expiry_time, product_code) values ('020b3984-a4d6-4400-8e4d-659787d21f22', 2000, 2, '2022-03-20T01:00:00Z', 'HOME-001')
+insert into quotations (quotation_code, amount, customer_id, expiry_time, product_code) values ('8da42492-0391-43bc-85cf-d9b55d0c606f', 1000, 2, '2022-03-01T02:45:00Z', 'HOME-002')
+insert into quotations (quotation_code, amount, customer_id, expiry_time, product_code) values ('84bb49ac-2561-444e-aea4-8225ab3ffdc3', 400, 2, '2022-01-23T13:20:00Z', 'HOME-003')

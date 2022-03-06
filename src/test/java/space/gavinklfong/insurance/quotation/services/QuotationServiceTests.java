@@ -11,9 +11,9 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import space.gavinklfong.insurance.quotation.apiclients.CustomerSrvClient;
 import space.gavinklfong.insurance.quotation.apiclients.ProductSrvClient;
-import space.gavinklfong.insurance.quotation.apiclients.models.Customer;
-import space.gavinklfong.insurance.quotation.apiclients.models.Product;
-import space.gavinklfong.insurance.quotation.dtos.QuotationReq;
+import space.gavinklfong.insurance.quotation.apiclients.dto.Customer;
+import space.gavinklfong.insurance.quotation.apiclients.dto.Product;
+import space.gavinklfong.insurance.quotation.dto.QuotationReq;
 import space.gavinklfong.insurance.quotation.exceptions.RecordNotFoundException;
 import space.gavinklfong.insurance.quotation.models.Quotation;
 import space.gavinklfong.insurance.quotation.repositories.QuotationRepository;
@@ -59,8 +59,6 @@ class QuotationServiceTests {
     private final double HIGH_RISK_AGE_ADJ_RATE = 1.5;
     private final double POST_CODE_DISCOUNT_RATE = 0.3;
     private final String[] PRODUCT_POST_CODE = {"SW20", "SM1", "E12" };
-
-
 
     private final Product PRODUCT = Product.builder()
             .productCode(PRODUCT_CODE)

@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import space.gavinklfong.insurance.quotation.apiclients.models.Product;
+import space.gavinklfong.insurance.quotation.apiclients.dto.Product;
 
 import java.util.List;
 

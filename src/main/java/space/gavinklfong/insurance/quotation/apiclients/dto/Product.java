@@ -1,4 +1,4 @@
-package space.gavinklfong.insurance.quotation.apiclients.models;
+package space.gavinklfong.insurance.quotation.apiclients.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 import java.util.Map;
 
@@ -16,7 +15,6 @@ import java.util.Map;
 @Builder
 @JsonInclude(Include.NON_NULL)
 public class Product {
-	@Id
 	private String productCode;
 	private String productPlan;
 	private String productClass;

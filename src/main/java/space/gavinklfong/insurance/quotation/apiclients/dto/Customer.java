@@ -1,4 +1,4 @@
-package space.gavinklfong.insurance.quotation.apiclients.models;
+package space.gavinklfong.insurance.quotation.apiclients.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -17,4 +17,5 @@ public class Customer {
 	private String name;
 	@JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate dob;
+	private long annualIncome;
 }

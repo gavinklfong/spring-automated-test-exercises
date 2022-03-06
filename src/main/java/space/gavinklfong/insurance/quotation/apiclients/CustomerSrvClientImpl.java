@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
-import space.gavinklfong.insurance.quotation.apiclients.models.Customer;
+import space.gavinklfong.insurance.quotation.apiclients.dto.Customer;
 
 import java.io.IOException;
 import java.time.Duration;

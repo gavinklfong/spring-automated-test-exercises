@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import space.gavinklfong.insurance.quotation.dtos.QuotationReq;
+import space.gavinklfong.insurance.quotation.dto.QuotationReq;
 import space.gavinklfong.insurance.quotation.models.Quotation;
 import space.gavinklfong.insurance.quotation.services.QuotationService;
 

@@ -1,4 +1,4 @@
-package space.gavinklfong.insurance.quotation.dtos;
+package space.gavinklfong.insurance.quotation.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

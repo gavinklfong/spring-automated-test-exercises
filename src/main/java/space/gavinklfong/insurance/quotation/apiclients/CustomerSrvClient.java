@@ -1,6 +1,6 @@
 package space.gavinklfong.insurance.quotation.apiclients;
 
-import space.gavinklfong.insurance.quotation.apiclients.models.Customer;
+import space.gavinklfong.insurance.quotation.apiclients.dto.Customer;
 
 import java.io.IOException;
 import java.util.List;
