@@ -17,8 +17,13 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static java.lang.String.format;
+import static java.util.Objects.isNull;
+
 @Slf4j
 @Service
 public class QuotationService {
@@ -87,10 +92,18 @@ public class QuotationService {
 		
 	}
 	
-	public Optional<Quotation> retrieveQuotation(String quotationCode) {
-		return quotationRepo.findById(quotationCode);
+	public Quotation retrieveQuotation(String quotationCode) {
+		Optional<Quotation> quotation = quotationRepo.findById(quotationCode);
+		if (quotation.isEmpty()) throw new RecordNotFoundException(format("quotation %s does not exist", quotationCode));
+
+		return quotation.get();
 	}
-	
+
+	public List<Quotation> retrieveQuotationByCustomerId(Long customerId) {
+		if (isNull(customerId)) return Collections.emptyList();
+		return quotationRepo.findByCustomerId(customerId);
+	}
+
 	private Customer retrieveCustomer(Long id) throws RecordNotFoundException, IOException {
 		List<Customer> customers = customerSrvClient.getCustomers(id);
 		if (customers.size() == 0) throw new RecordNotFoundException("Customer record not found");

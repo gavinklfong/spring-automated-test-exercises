@@ -11,4 +11,6 @@ public interface QuotationRepository extends JpaRepository<Quotation, String> {
 
     List<Quotation> findByProductCode(String productCode);
 
+    List<Quotation> findByCustomerId(Long customerID);
+
 }

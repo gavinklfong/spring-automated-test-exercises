@@ -16,17 +16,8 @@ import java.util.Map;
 @JsonInclude(Include.NON_NULL)
 public class Product {
 	private String productCode;
-	private String productPlan;
-	private String productClass;
 	private Long buildingSumInsured;
 	private Long contentSumInsured;
-	private String buildsAccidentalDamage;
-	private String contentsAccidentalDamage;
-	private Long maxAlternativeAccommodation;
-	private Boolean matchingItems;
-	private Long maxValuables;
-	private Long contentsInGarden;
-	private Long theftFromOutbuildings;
 	private Integer customerAgeThreshold;
 	private Double customerAgeThresholdAdjustmentRate;
 	private String[] discountPostCode;

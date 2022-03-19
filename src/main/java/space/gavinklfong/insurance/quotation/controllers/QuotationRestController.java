@@ -13,6 +13,7 @@ import space.gavinklfong.insurance.quotation.services.QuotationService;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -26,11 +27,17 @@ public class QuotationRestController {
 	@GetMapping(value= {"/{id}"}, produces=MediaType.APPLICATION_JSON_VALUE)
 	public Quotation getQuotation(@PathVariable String id) {
 		log.info("Received query of quotation by id {}", id);
-		Optional<Quotation> product = quotationService.retrieveQuotation(id);
-		if (product.isPresent()) {
-			return product.get();
+		return quotationService.retrieveQuotation(id);
+	}
+
+	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
+	public List<Quotation> getQuotationByCustomerId(@RequestParam Long customerId) {
+		log.info("Received query of quotation by customer id: {}", customerId);
+		List<Quotation> quotations = quotationService.retrieveQuotationByCustomerId(customerId);
+		if (quotations.size() > 0) {
+			return quotations;
 		} else {
-			log.debug("Quotation {} does not exist", id);
+			log.debug("Quotation does not exist");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Quotation record not found");
 		}
 	}
