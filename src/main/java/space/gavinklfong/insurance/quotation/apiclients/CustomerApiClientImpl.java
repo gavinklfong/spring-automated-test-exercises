@@ -11,30 +11,31 @@ import space.gavinklfong.insurance.quotation.apiclients.dto.Customer;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Component
-public class CustomerSrvClientImpl implements CustomerSrvClient {
+public class CustomerApiClientImpl implements CustomerApiClient {
 
     private String customerSrvUrl;
 
-    public CustomerSrvClientImpl(@Value("${app.customerSrvUrl}") String url) {
+    public CustomerApiClientImpl(@Value("${app.customerSrvUrl}") String url) {
         customerSrvUrl = url;
     }
 
     @Override
-    public List<Customer> getCustomers(Long id) throws IOException {
+    public Optional<Customer> getCustomerById(Long id) throws IOException {
 
         WebClient webClient = WebClient.create(customerSrvUrl);
-        return webClient.get()
+        Customer customer = webClient.get()
                 .uri("/customers/" + id)
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response ->  ( Mono.empty() ))
-                .bodyToFlux(Customer.class)
+                .bodyToMono(Customer.class)
                 .retryWhen(Retry.backoff(3, Duration.ofSeconds(3)))
-                .collectList()
                 .block();
+
+        return Optional.ofNullable(customer);
     }
 
     public Customer saveCustomer(Customer customer) {

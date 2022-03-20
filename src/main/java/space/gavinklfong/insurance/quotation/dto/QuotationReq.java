@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class QuotationReq {
 
-	@NotNull
 	@NotBlank
 	private String productCode;
 	@NotNull

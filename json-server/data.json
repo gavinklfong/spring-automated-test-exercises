@@ -1,0 +1,14 @@
+{
+  "customers": [
+    { "id":  1, "name":  "John Don", "dob":  "2001-02-15", "annualIncome":  90000}
+  ],
+  "products": [
+    { "id":  "HOME-001",
+      "buildingSumInsured":  20000,
+      "contentSumInsured":  500,
+      "customerAgeThreshold":  70, "customerAgeThresholdAdjustmentRate" :  1.5,
+      "discountPostCode": ["SE18"], "postCodeDiscountRate": 0.3,
+      "listedPrice": 1000
+    }
+  ]
+}

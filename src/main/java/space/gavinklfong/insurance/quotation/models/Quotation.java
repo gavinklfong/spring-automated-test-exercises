@@ -14,13 +14,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@With
 @Entity
 @Table(name = "quotations")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Quotation {
 	
 	@Id
-	@With
 	private String quotationCode;
 
 	private Double amount;

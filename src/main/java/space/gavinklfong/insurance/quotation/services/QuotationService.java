@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import space.gavinklfong.insurance.quotation.apiclients.CustomerSrvClient;
-import space.gavinklfong.insurance.quotation.apiclients.ProductSrvClient;
+import space.gavinklfong.insurance.quotation.apiclients.CustomerApiClient;
+import space.gavinklfong.insurance.quotation.apiclients.ProductApiClient;
 import space.gavinklfong.insurance.quotation.apiclients.dto.Customer;
 import space.gavinklfong.insurance.quotation.apiclients.dto.Product;
 import space.gavinklfong.insurance.quotation.dto.QuotationReq;
@@ -16,10 +16,7 @@ import space.gavinklfong.insurance.quotation.repositories.QuotationRepository;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
@@ -35,10 +32,10 @@ public class QuotationService {
 	private QuotationRepository quotationRepo;
 
 	@Autowired
-	private CustomerSrvClient customerSrvClient;	
+	private CustomerApiClient customerSrvClient;
 	
 	@Autowired
-	private ProductSrvClient productSrvClient;
+	private ProductApiClient productSrvClient;
 
 	public Quotation generateQuotation(QuotationReq request) throws IOException, RecordNotFoundException {
 		
@@ -46,15 +43,13 @@ public class QuotationService {
 		
 		// get customer info
 		Customer customer = retrieveCustomer(request.getCustomerId());
-		log.debug(customer.toString());
-		
+
 		// get product spec
 		Product product = retrieveProduct(request.getProductCode());
-		log.debug(product.toString());
-		
+
 		// check customer age against the threshold defined in product spec
 		//
-		// If customer's age exceeds the threshold, increment the listed price by 50%
+		// If customer's age exceeds the threshold, increase the quote by 50%
 		// Otherwise, get the listed price
 		//
 		LocalDateTime now = LocalDateTime.now();
@@ -74,22 +69,24 @@ public class QuotationService {
 			boolean found = Arrays.stream(product.getDiscountPostCode())
 							.anyMatch(x -> x.equalsIgnoreCase(request.getPostCode()));
 			if (found) {
-				log.debug("Post code matched, apply discount rate = " + product.getPostCodeDiscountRate());
+				log.debug("Postcode matched, apply discount rate = " + product.getPostCodeDiscountRate());
 				quotationAmount *= (1 - product.getPostCodeDiscountRate());
 			}
 		}
 
-		log.debug("After post code check, amount = " + quotationAmount);
+		log.debug("After postcode check, amount = " + quotationAmount);
 		
 		// Construct quotation and save to data store
 		Quotation quotation = Quotation.builder()
+				.quotationCode(UUID.randomUUID().toString())
 				.expiryTime(now.plusMinutes(quotationExpiryTime))
 				.productCode(request.getProductCode())
 				.amount(quotationAmount)
 				.build();
 		
-		return quotationRepo.save(quotation);
-		
+		quotationRepo.save(quotation);
+
+		return quotation;
 	}
 	
 	public Quotation retrieveQuotation(String quotationCode) {
@@ -105,16 +102,15 @@ public class QuotationService {
 	}
 
 	private Customer retrieveCustomer(Long id) throws RecordNotFoundException, IOException {
-		List<Customer> customers = customerSrvClient.getCustomers(id);
-		if (customers.size() == 0) throw new RecordNotFoundException("Customer record not found");
-		return customers.get(0);
+		Optional<Customer> customer = customerSrvClient.getCustomerById(id);
+		if (customer.isEmpty()) throw new RecordNotFoundException("Customer record not found");
+		return customer.get();
 	}
 	
 	private Product retrieveProduct(String productCode) throws RecordNotFoundException {
-		
-		List<Product> products = productSrvClient.getProducts(productCode);
-		if (products.size() == 0) throw new RecordNotFoundException("Product record not found");		
-		return products.get(0);
+		Optional<Product> product = productSrvClient.getProductByCode(productCode);
+		if (product.isEmpty()) throw new RecordNotFoundException("Product record not found");
+		return product.get();
 		
 	}
 	

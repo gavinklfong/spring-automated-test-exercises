@@ -15,7 +15,7 @@ import java.util.Map;
 @Builder
 @JsonInclude(Include.NON_NULL)
 public class Product {
-	private String productCode;
+	private String id;
 	private Long buildingSumInsured;
 	private Long contentSumInsured;
 	private Integer customerAgeThreshold;

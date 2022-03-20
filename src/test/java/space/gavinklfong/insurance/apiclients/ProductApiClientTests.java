@@ -9,18 +9,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import space.gavinklfong.insurance.quotation.apiclients.ProductSrvClient;
-import space.gavinklfong.insurance.quotation.apiclients.ProductSrvClientImpl;
+import space.gavinklfong.insurance.quotation.apiclients.ProductApiClient;
+import space.gavinklfong.insurance.quotation.apiclients.ProductApiClientImpl;
 import space.gavinklfong.insurance.quotation.apiclients.dto.Product;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Optional;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @WireMockTest
-public class ProductSrvClientTests {
+public class ProductApiClientTests {
 
     static final private String PRODUCT_CODE = "CAR001-01";
     private final int HIGH_RISK_AGE = 70;
@@ -33,7 +33,7 @@ public class ProductSrvClientTests {
 
     private Faker faker = new Faker();
 
-    public ProductSrvClientTests() {
+    public ProductApiClientTests() {
         super();
         objectMapper.registerModule(new JavaTimeModule());
     }
@@ -41,11 +41,11 @@ public class ProductSrvClientTests {
     @Test
     void givenProductExists_whenRetrieveProduct_thenSuccess(WireMockRuntimeInfo wmRuntimeInfo) throws IOException {
 
-        ProductSrvClient productSrvClient = new ProductSrvClientImpl(wmRuntimeInfo.getHttpBaseUrl());
+        ProductApiClient productSrvClient = new ProductApiClientImpl(wmRuntimeInfo.getHttpBaseUrl());
 
         // Given
         Product mockedProduct = Product.builder()
-                .productCode(PRODUCT_CODE)
+                .id(PRODUCT_CODE)
                 .buildingSumInsured(faker.number().randomNumber())
                 .contentSumInsured(faker.number().randomNumber())
                 .customerAgeThreshold(HIGH_RISK_AGE)
@@ -62,17 +62,19 @@ public class ProductSrvClientTests {
         );
 
         // When
-        List<Product> products = productSrvClient.getProducts(PRODUCT_CODE);
+        Optional<Product> product = productSrvClient.getProductByCode(PRODUCT_CODE);
 
         // Then
         verify(getRequestedFor(urlEqualTo("/products/" + PRODUCT_CODE)));
-        assertThat(products).isNotEmpty().hasSize(1).containsExactlyInAnyOrder(mockedProduct);
+        assertThat(product)
+                .isPresent()
+                .hasValue(mockedProduct);
     }
 
     @Test
     void givenProductNotExists_whenRetrieveProduct_thenFail(WireMockRuntimeInfo wmRuntimeInfo) throws IOException {
 
-        ProductSrvClient productSrvClient = new ProductSrvClientImpl(wmRuntimeInfo.getHttpBaseUrl());
+        ProductApiClient productSrvClient = new ProductApiClientImpl(wmRuntimeInfo.getHttpBaseUrl());
 
         // Given
         stubFor(get(urlEqualTo("/products/" + PRODUCT_CODE))
@@ -81,11 +83,11 @@ public class ProductSrvClientTests {
         );
 
         // When
-        List<Product> products = productSrvClient.getProducts(PRODUCT_CODE);
+        Optional<Product> product = productSrvClient.getProductByCode(PRODUCT_CODE);
 
         // Then
         verify(getRequestedFor(urlEqualTo("/products/" + PRODUCT_CODE)));
-        assertThat(products).isEmpty();
+        assertThat(product).isEmpty();
     }
 
 }

@@ -7,26 +7,27 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import space.gavinklfong.insurance.quotation.apiclients.dto.Product;
 
-import java.util.List;
+import java.util.Optional;
 
 @Component
-public class ProductSrvClientImpl implements ProductSrvClient {
+public class ProductApiClientImpl implements ProductApiClient {
 
     private String productSrvUrl;
 
-    public ProductSrvClientImpl(@Value("${app.productSrvUrl}") String url) {
+    public ProductApiClientImpl(@Value("${app.productSrvUrl}") String url) {
         productSrvUrl = url;
     }
 
     @Override
-    public List<Product> getProducts(String id) {
+    public Optional<Product> getProductByCode(String code) {
         WebClient webClient = WebClient.create(productSrvUrl);
-        return webClient.get()
-                .uri("/products/" + id)
+        Product product = webClient.get()
+                .uri("/products/" + code)
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response ->  ( Mono.empty() ))
-                .bodyToFlux(Product.class)
-                .collectList()
+                .bodyToMono(Product.class)
                 .block();
+
+        return Optional.ofNullable(product);
     }
 }

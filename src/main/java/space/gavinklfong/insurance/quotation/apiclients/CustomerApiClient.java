@@ -4,9 +4,8 @@ import space.gavinklfong.insurance.quotation.apiclients.dto.Customer;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
-public interface CustomerSrvClient {
-
-	List<Customer> getCustomers(Long id) throws IOException;
-	
+public interface CustomerApiClient {
+	Optional<Customer> getCustomerById(Long id) throws IOException;
 }

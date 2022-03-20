@@ -19,6 +19,7 @@
 	  <wiremock.version>2.32.0</wiremock.version>
 	  <javafaker.version>1.0.2</javafaker.version>
 	  <jackson-datatype-jsr310.version>2.12.5</jackson-datatype-jsr310.version>
+	  <testcontainers.version>1.16.2</testcontainers.version>
   </properties>
 	<dependencies>
 		<dependency>
@@ -89,17 +90,41 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mysql</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.28</version>
+		</dependency>
+
+
 	</dependencies>
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${spring-cloud.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+		<dependency>
+		<groupId>org.springframework.cloud</groupId>
+		<artifactId>spring-cloud-dependencies</artifactId>
+		<version>${spring-cloud.version}</version>
+		<type>pom</type>
+		<scope>import</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-bom</artifactId>
+			<version>${testcontainers.version}</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
     </dependencies>
   </dependencyManagement>
 
