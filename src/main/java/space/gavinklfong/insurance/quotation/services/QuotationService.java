@@ -80,6 +80,7 @@ public class QuotationService {
 		Quotation quotation = Quotation.builder()
 				.quotationCode(UUID.randomUUID().toString())
 				.expiryTime(now.plusMinutes(quotationExpiryTime))
+				.customerId(request.getCustomerId())
 				.productCode(request.getProductCode())
 				.amount(quotationAmount)
 				.build();

@@ -1,11 +1,19 @@
-# Sample Implementation of Automated Test Using WireMock
+# Exercises of Automated Test Implementation
 
 ## Overview
-This repository provides a sample Spring Boot Application for the demonstration of WireMock Usage in Unit Test and Component Test.
+This repository provides a sample Spring Boot Application for practicing the implementation of unit tests.
 
-It is a insurance product quotation API, it exposes an endpoint ``POST /quotations/generate`` and quotation generation.
+It is a insurance product quotation API, it exposes an endpoint:
+- ``POST /quotations``: Generate new quotation 
+- ``GET /quotations/{quotationCode}`` : Retrieve quotation by code 
 
-![Application Component Diagram](https://github.com/gavinklfong/spring-wiremock-demo/blob/main/blob/WireMock-Quotation_Service.png?raw=true)
+![Application Component Diagram](https://github.com/gavinklfong/spring-automated-test-exercises/blob/main/blob/Product-Quotation_System.png?raw=true)
+
+## Exercises
+If you are about to start the exercise, then checkout **exercise** branch.
+
+- **exercise** branch - contain skeleton of test codes for exercises
+- **master** branch - contain completed set of unit test codes
 
 ## Build
 
@@ -13,21 +21,49 @@ Run this command to build and run all automated tests
 
 `mvn clean install`
 
-If you would like to run the component test only, then run this command
+## Run
 
-`mvn -Dtest=CucumberTest test`
+### External APIs
+This system depends on external APIs - Customer API and Product API. To run this system on local machine for testing, you need to start up json-server which simulate the response of Customer API and Product API.
 
-## Unit Test
+Run this command to start up the json server:
 
-Unit test demonstrates the testing on API client with API stub created using WireMock.
+````
+json-server --watch ./json-server/data.json
+````
+If your local machine does not have json-server, then run this command for installation:
+```
+npm --install -g json-server
+```
 
-![Unit Test Diagram](https://github.com/gavinklfong/spring-wiremock-demo/blob/main/blob/WireMock-Unit_Test.png?raw=true)
+### Database
+By default, it connects to H2 in-memory database. 
 
+### SpringBoot Application
+Finally, run this command to launch the SpringBoot application:
+```
+mvn spring-boot:run
+```
 
-## Component Test
+## Test It Manually
 
-Component test is a block box test, it submits requests to the quotation service and verify the outputs. All external API services are mocked using WireMock.
+Once you have the system up and running, run curl command to verify its healthiness 
 
-![Component Test Diagram](https://github.com/gavinklfong/spring-wiremock-demo/blob/main/blob/WireMock-Component_Test.png?raw=true)
+### Get quotations
+Sample quotation records are inserted into database by default during the startup.
+```
+curl --location --request \
+GET 'http://localhost:8102/quotations/e6766e0c-df53-4ea8-bede-dbe3b4006798'
+```
 
-
+### Generate a new quotation
+Run this curl command to generate a new quotation record:
+```
+curl --location --request POST 'http://localhost:8102/quotations' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "productCode": "HOME-001",
+    "customerId": 1,
+    "postCode": "ABC"
+}'
+```

@@ -2,7 +2,6 @@ package space.gavinklfong.insurance.apiclients;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.github.javafaker.Faker;
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,6 @@ import space.gavinklfong.insurance.quotation.apiclients.dto.Customer;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Optional;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;

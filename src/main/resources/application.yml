@@ -10,11 +10,16 @@ info:
 app:
   quotation:
     expiryTime: 1440
-  customerSrvUrl: http://localhost:8103
-  productSrvUrl: http://localhost:8101
+  customerSrvUrl: http://localhost:3000
+  productSrvUrl: http://localhost:3000
 
 spring:
   application:
     name: quotation-srv
   datasource:
     url: jdbc:h2:mem:quotation
+  jpa:
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
+    defer-datasource-initialization: true
