@@ -7,13 +7,13 @@ It is a insurance product quotation API, it exposes an endpoint:
 - ``POST /quotations``: Generate new quotation 
 - ``GET /quotations/{quotationCode}`` : Retrieve quotation by code 
 
-![Application Component Diagram](https://github.com/gavinklfong/spring-automated-test-exercises/blob/main/blob/Product-Quotation_System.png?raw=true)
+![Application Component Diagram](https://github.com/gavinklfong/spring-automated-test-exercises/blob/main/blob/Product_Quotation_System.png?raw=true)
 
 ## Exercises
 If you are about to start the exercise, then checkout **exercise** branch.
 
 - **exercise** branch - contain skeleton of test codes for exercises
-- **master** branch - contain completed set of unit test codes
+- **main** branch - contain completed set of unit test codes
 
 ## Build
 
