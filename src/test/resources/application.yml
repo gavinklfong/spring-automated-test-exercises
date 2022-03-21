@@ -20,4 +20,7 @@ spring:
     url: jdbc:h2:mem:quotation
   jpa:
     show-sql: true
-
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
+    defer-datasource-initialization: true

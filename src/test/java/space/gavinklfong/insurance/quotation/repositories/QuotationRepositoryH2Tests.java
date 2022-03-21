@@ -51,40 +51,18 @@ public class QuotationRepositoryH2Tests {
     @Test
     @Sql("/quotation-init-data.sql")
     void testFindByQuotationCode() {
-        Optional<Quotation> quotation = quotationRepository.findById(QUOTATION_KEY_1);
-        assertThat(quotation)
-                .isPresent()
-                .hasValue(DEFAULT_QUOTATION_MAP.get(QUOTATION_KEY_1));
 
     }
 
     @Test
     @Sql("/quotation-init-data.sql")
     void testFindByProductCode() {
-        List<Quotation> quotations = quotationRepository.findByProductCode("HOME-001");
-        assertThat(quotations)
-                .hasSize(3)
-                .containsExactlyInAnyOrderElementsOf(DEFAULT_QUOTATION_MAP.values());
+
     }
 
     @Test
     void testSave() {
-        List<Quotation> quotations = asList(buildQuotationWithRandomValues(), buildQuotationWithRandomValues(), buildQuotationWithRandomValues());
-        quotations.forEach(quotation -> quotationRepository.save(quotation));
 
-        List<Quotation> output = quotationRepository.findAll();
-
-        assertThat(output)
-                .hasSize(3)
-                .containsExactlyInAnyOrderElementsOf(quotations);
     }
 
-    private Quotation buildQuotationWithRandomValues() {
-        return Quotation.builder()
-                .quotationCode(UUID.randomUUID().toString())
-                .productCode(faker.code().toString())
-                .amount(faker.number().randomDouble(2, 1000, 50000))
-                .customerId(1L)
-                .build();
-    }
 }

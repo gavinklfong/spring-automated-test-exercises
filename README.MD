@@ -53,7 +53,7 @@ Once you have the system up and running, run curl command to verify its healthin
 Sample quotation records are inserted into database by default during the startup.
 ```
 curl --location --request \
-GET 'http://localhost:8102/quotations/e6766e0c-df53-4ea8-bede-dbe3b4006798'
+GET 'http://localhost:8102/quotations/56335a88-e28c-4b5e-a150-d4ce46f732dd'
 ```
 
 ### Generate a new quotation

@@ -43,32 +43,7 @@ public class ProductApiClientTests {
 
         ProductApiClient productSrvClient = new ProductApiClientImpl(wmRuntimeInfo.getHttpBaseUrl());
 
-        // Given
-        Product mockedProduct = Product.builder()
-                .id(PRODUCT_CODE)
-                .buildingSumInsured(faker.number().randomNumber())
-                .contentSumInsured(faker.number().randomNumber())
-                .customerAgeThreshold(HIGH_RISK_AGE)
-                .customerAgeThresholdAdjustmentRate(HIGH_RISK_AGE_ADJ_RATE)
-                .discountPostCode(PRODUCT_POST_CODE)
-                .postCodeDiscountRate(POST_CODE_DISCOUNT_RATE)
-                .listedPrice(LISTED_PRICE)
-                .build();
 
-        stubFor(get(urlEqualTo("/products/" + PRODUCT_CODE))
-                .willReturn(aResponse()
-                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                        .withBody(objectMapper.writeValueAsString(mockedProduct)))
-        );
-
-        // When
-        Optional<Product> product = productSrvClient.getProductByCode(PRODUCT_CODE);
-
-        // Then
-        verify(getRequestedFor(urlEqualTo("/products/" + PRODUCT_CODE)));
-        assertThat(product)
-                .isPresent()
-                .hasValue(mockedProduct);
     }
 
     @Test
@@ -76,18 +51,6 @@ public class ProductApiClientTests {
 
         ProductApiClient productSrvClient = new ProductApiClientImpl(wmRuntimeInfo.getHttpBaseUrl());
 
-        // Given
-        stubFor(get(urlEqualTo("/products/" + PRODUCT_CODE))
-                .willReturn(aResponse()
-                        .withStatus(HttpStatus.NOT_FOUND.value()))
-        );
-
-        // When
-        Optional<Product> product = productSrvClient.getProductByCode(PRODUCT_CODE);
-
-        // Then
-        verify(getRequestedFor(urlEqualTo("/products/" + PRODUCT_CODE)));
-        assertThat(product).isEmpty();
     }
 
 }

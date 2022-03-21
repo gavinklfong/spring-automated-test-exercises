@@ -42,72 +42,17 @@ public class QuotationRestControllerTests {
     @Test
     void givenSuccessfulQuotationGeneration_whenPostForQuotation_thenReturnQuotation() throws Exception {
 
-        final Quotation QUOTATION = Quotation.builder()
-                .quotationCode(UUID.randomUUID().toString())
-                .amount(faker.number().randomDouble(2, 1000, 5000))
-                .expiryTime(LocalDateTime.now().plusMinutes(10).withNano(0))
-                .build();
-
-        QuotationReq quotationReq = QuotationReq.builder()
-                .postCode(faker.address().zipCode())
-                .customerId(faker.number().randomNumber())
-                .productCode(faker.code().toString())
-                .build();
-
-        when(quotationService.generateQuotation(quotationReq))
-                .thenAnswer(invocation -> {
-                    QuotationReq req = (QuotationReq) invocation.getArgument(0);
-                    return QUOTATION
-                            .withProductCode(req.getProductCode())
-                            .withCustomerId(req.getCustomerId());
-                }
-        );
-
-        mockMvc.perform(
-                post("/quotations")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(quotationReq))
-        )
-                .andDo((print()))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.quotationCode").value(QUOTATION.getQuotationCode()))
-                .andExpect(jsonPath("$.amount").value(QUOTATION.getAmount()))
-                .andExpect(jsonPath("$.expiryTime").value(QUOTATION.getExpiryTime().toString()))
-                .andExpect(jsonPath("$.productCode").value(quotationReq.getProductCode()))
-                .andExpect(jsonPath("$.customerId").value(quotationReq.getCustomerId()));
     }
 
     @Test
     void givenRecordNotFound_whenPostForQuotation_thenReturnBadRequest() throws Exception {
 
-        when(quotationService.generateQuotation(any(QuotationReq.class))).thenThrow(new RecordNotFoundException());
-
-        QuotationReq req = QuotationReq.builder()
-                .postCode(faker.address().zipCode())
-                .customerId(faker.number().randomNumber())
-                .productCode(faker.code().toString())
-                .build();
-
-        mockMvc.perform(
-                        post("/quotations")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(req))
-                )
-                .andDo((print()))
-                .andExpect(status().isBadRequest());
     }
 
     @ParameterizedTest
     @MethodSource("generateInvalidQuotationRequests")
     void givenInvalidRequest_whenPostForQuotation_thenReturnBadRequest(QuotationReq quotationReq) throws Exception {
-        mockMvc.perform(
-                        post("/quotations")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(quotationReq))
-                )
-                .andDo((print()))
-                .andExpect(status().isBadRequest());
+
     }
 
     static Stream<Arguments> generateInvalidQuotationRequests() {

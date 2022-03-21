@@ -58,67 +58,22 @@ class QuotationServiceTests {
     @Test
     void givenQuotations_whenRetrieveByCustomerId_thenReturnQuotations() {
 
-        final Long CUSTOMER_ID = 1L;
-
-        Quotation quotation = Quotation.builder()
-                .quotationCode(UUID.randomUUID().toString())
-                .productCode("HOME-0001")
-                .customerId(CUSTOMER_ID)
-                .amount(1500D)
-                .build();
-
-        when(quotationRepo.findByCustomerId(CUSTOMER_ID)).thenReturn(asList(quotation));
-
-        List<Quotation> output = quotationService.retrieveQuotationByCustomerId(CUSTOMER_ID);
-
-        assertThat(output).hasSize(1).containsExactly(quotation);
     }
 
     @Test
     void givenQuotationExists_whenRetrieveQuotation_thenReturnQuotation() {
 
-        when(quotationRepo.findById(QUOTATION_CODE)).thenReturn(Optional.of(QUOTATION));
-
-        Quotation result = quotationService.retrieveQuotation(QUOTATION_CODE);
-
-        assertThat(result).isEqualTo(QUOTATION);
-        verify(quotationRepo, times(1)).findById(QUOTATION_CODE);
     }
 
     @Test
     void givenQuotationNotFound_whenRetrieveQuotation_thenThrowRecordNotFoundException() {
 
-        when(quotationRepo.findById(QUOTATION_CODE)).thenReturn(Optional.empty());
-
-        assertThrows(RecordNotFoundException.class, () -> quotationService.retrieveQuotation(QUOTATION_CODE));
-
-        verify(quotationRepo, times(1)).findById(QUOTATION_CODE);
     }
 
     @ParameterizedTest
     @MethodSource("generateQuotationTestScenarios")
     void givenPostCodeAndCustomerAge_whenGenerateQuotation_thenReturnQuote(String postCode, int customerAge, double expectedAmount) throws RecordNotFoundException, IOException {
 
-        // Given
-        givenCondition(customerAge);
-
-        // When
-        QuotationReq req = QuotationReq.builder()
-                .customerId(CUSTOMER_ID)
-                .postCode(postCode)
-                .productCode(PRODUCT_CODE)
-                .build();
-        Quotation result = quotationService.generateQuotation(req);
-
-        // Then
-        assertThat(result.getAmount()).isEqualTo(expectedAmount);
-        assertThat(result.getExpiryTime()).isAfter(LocalDateTime.now());
-        assertThat(result.getCustomerId()).isEqualTo(CUSTOMER_ID);
-        assertThat(result.getProductCode()).isEqualTo(PRODUCT_CODE);
-
-        verify(customerSrvClient, times(1)).getCustomerById(req.getCustomerId());
-        verify(productSrvClient, times(1)).getProductByCode(req.getProductCode());
-        verify(quotationRepo, times(1)).save(result);
     }
 
     /**
@@ -136,66 +91,17 @@ class QuotationServiceTests {
     }
 
     private void givenCondition(int customerAge) throws IOException {
-        when(quotationRepo.save(any(Quotation.class)))
-                .thenAnswer(invocation -> (invocation.getArgument(0)));
 
-        Customer customer =
-                Customer.builder()
-                        .id(CUSTOMER_ID)
-                        .dob(LocalDate.now().minusYears(customerAge))
-                        .name(CUSTOMER_NAME)
-                        .build();
-        when(customerSrvClient.getCustomerById(CUSTOMER_ID)).thenReturn(Optional.of(customer));
-
-        when(productSrvClient.getProductByCode(PRODUCT_CODE)).thenReturn(Optional.of(PRODUCT));
     }
 
     @Test
     void givenProductNotFound_whenGenerateQuotation_thenThrowException() throws RecordNotFoundException, IOException {
 
-        // Given
-        Customer customer =
-                Customer.builder()
-                        .id(CUSTOMER_ID)
-                        .dob(LocalDate.of(2000, 1, 28))
-                        .name(CUSTOMER_NAME)
-                        .build();
-        when(customerSrvClient.getCustomerById(CUSTOMER_ID)).thenReturn(Optional.of(customer));
-
-        when(productSrvClient.getProductByCode(anyString())).thenThrow(new RecordNotFoundException());
-
-        // When
-        QuotationReq req = QuotationReq.builder()
-                .customerId(CUSTOMER_ID)
-                .postCode("ABC")
-                .productCode(PRODUCT_CODE)
-                .build();
-        assertThrows(RecordNotFoundException.class, () -> quotationService.generateQuotation(req));
-
-        // Then
-        verify(customerSrvClient, times(1)).getCustomerById(req.getCustomerId());
-        verify(productSrvClient, times(1)).getProductByCode(req.getProductCode());
-        verifyNoInteractions(quotationRepo);
     }
 
     @Test
     void givenCustomerNotFound_whenGenerateQuotation_thenThrowException() throws RecordNotFoundException, IOException {
 
-        // Given
-        when(customerSrvClient.getCustomerById(anyLong())).thenThrow(new RecordNotFoundException());
-
-        // When
-        QuotationReq req = QuotationReq.builder()
-                .customerId(CUSTOMER_ID)
-                .postCode("ABC")
-                .productCode(PRODUCT_CODE)
-                .build();
-        assertThrows(RecordNotFoundException.class, () -> quotationService.generateQuotation(req));
-
-        // Then
-        verify(customerSrvClient, times(1)).getCustomerById(req.getCustomerId());
-        verifyNoInteractions(productSrvClient);
-        verifyNoInteractions(quotationRepo);
     }
 
     interface TestConstants {
