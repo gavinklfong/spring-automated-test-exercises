@@ -47,14 +47,7 @@ mvn spring-boot:run
 
 ## Test It Manually
 
-Once you have the system up and running, run curl command to verify its healthiness 
-
-### Get quotations
-Sample quotation records are inserted into database by default during the startup.
-```
-curl --location --request \
-GET 'http://localhost:8102/quotations/56335a88-e28c-4b5e-a150-d4ce46f732dd'
-```
+Once you have the system up and running, run curl command to verify its healthiness
 
 ### Generate a new quotation
 Run this curl command to generate a new quotation record:
@@ -66,4 +59,11 @@ curl --location --request POST 'http://localhost:8102/quotations' \
     "customerId": 1,
     "postCode": "ABC"
 }'
+```
+
+### Get quotations
+Run this curl command with the quotation code obtained from the newly generated one to test the retrieval
+```
+curl --location --request \
+GET 'http://localhost:8102/quotations/56335a88-e28c-4b5e-a150-d4ce46f732dd'
 ```
